@@ -22,17 +22,18 @@ services:
       - private
       - public
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=1026
+      - PGID=100
       - VERSION=docker
       - PLEX_CLAIM= #optional
     labels:
-      - traefik.http.routers.plex.rule=Host(`nzti.plex.lab`)
+      - traefik.http.routers.plex.rule=Host(`plex.nzti.tv`)
       - traefik.http.services.plex.loadbalancer.server.port=32400
     volumes:
-      - /data/config:/config
-      - /data/tv:/tv
-      - /data/movies:/movies
+      - /volume1/data/config:/config
+      - /volume1/data/tv:/tv
+      - /volume1/data/movies:/movies
+      - /volume1/data/anime:/anime
     restart: unless-stopped
 
 networks:
