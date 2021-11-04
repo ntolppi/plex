@@ -7,12 +7,12 @@ services:
       - private
       - public
     ports:
-      - 80:80
-      - 443:443
+      - 880:80
+      - 8443:443
       - 8080:8080
     volumes:
       - ./traefik.toml:/etc/traefik.toml
-      - /etc/ssl/plex_cert.key:/etc/ssl/plex_cert.key
+      - /etc/ssl/plex_key.pem:/etc/ssl/plex_key.pem
       - /etc/ssl/plex_cert.pem:/etc/ssl/plex_cert.pem
       - /var/run/docker.sock:/var/run/docker.sock
   plex:
@@ -30,9 +30,9 @@ services:
       - traefik.http.routers.plex.rule=Host(`nzti.plex.lab`)
       - traefik.http.services.plex.loadbalancer.server.port=32400
     volumes:
-      - /path/to/library:/config
-      - /path/to/tvseries:/tv
-      - /path/to/movies:/movies
+      - /data/config:/config
+      - /data/tv:/tv
+      - /data/movies:/movies
     restart: unless-stopped
 
 networks:

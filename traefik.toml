@@ -17,4 +17,4 @@ defaultEntryPoints = ["http", "https"]
     [entryPoints.https.tls]
       [[entryPoints.https.tls.certificates]]
       CertFile = "/etc/ssl/plex_key.pem"
-      KeyFile = "/etc/ssl/plex_cert/pem"
+      KeyFile = "/etc/ssl/plex_cert.pem"
