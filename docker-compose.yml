@@ -2,12 +2,13 @@ version: "3"
 services:
   traefik:
     image: traefik:v2.5
-    command: --api.insecure=true --providers.docker
+    command: --providers.docker
+    container_name: traefik
     networks:
       - private
       - public
     ports:
-      - 880:80
+      - 8008:80
       - 8443:443
       - 8080:8080
     volumes:
@@ -15,6 +16,7 @@ services:
       - /etc/ssl/plex_key.pem:/etc/ssl/plex_key.pem
       - /etc/ssl/plex_cert.pem:/etc/ssl/plex_cert.pem
       - /var/run/docker.sock:/var/run/docker.sock
+      - /var/log/traefik:/var/log/traefik
   plex:
     image: lscr.io/linuxserver/plex
     container_name: plex

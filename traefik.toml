@@ -1,7 +1,7 @@
 # traefik.toml
 logLevel = "INFO"
-traefikLogsFile = "log/traefik.log"
-accessLogsFile = "log/access.log"
+traefikLogsFile = "/var/log/traefik/traefik.log"
+accessLogsFile = "/var/log/traefik/access.log"
 
 [retry]
   attempts = 3
