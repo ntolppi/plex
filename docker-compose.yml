@@ -1,0 +1,42 @@
+version: "3"
+services:
+  traefik:
+    image: traefik:v2.5
+    command: --api.insecure=true --providers.docker
+    networks:
+      - private
+      - public
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - ./traefik.toml:/etc/traefik.toml
+      - /etc/ssl/plex_cert.key:/etc/ssl/plex_cert.key
+      - /etc/ssl/plex_cert.pem:/etc/ssl/plex_cert.pem
+      - /var/run/docker.sock:/var/run/docker.sock
+  plex:
+    image: lscr.io/linuxserver/plex
+    container_name: plex
+    networks:
+      - private
+      - public
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+      - PLEX_CLAIM= #optional
+    labels:
+      - traefik.http.routers.plex.rule=Host(`nzti.plex.lab`)
+      - traefik.http.services.plex.loadbalancer.server.port=32400
+    volumes:
+      - /path/to/library:/config
+      - /path/to/tvseries:/tv
+      - /path/to/movies:/movies
+    restart: unless-stopped
+
+networks:
+  public:
+    driver: bridge
+  private:
+    driver: bridge
