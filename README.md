@@ -29,11 +29,11 @@ docker-compose up -d
 
 ## Troubleshooting
 ### Acme.json permission / file not found error
-The docker-compose volumes has letencrypt, which should auto be created when running up, if it isn't create a letsencrypt directory
+The docker-compose volumes has letencrypt directory, which should auto be created when running docker-compose up -d, if it isn't create a letsencrypt directory
 ```bash
 mkdir letsencrypt
 ```
-In the letsencrypt directory an acme.json file will be created, DO NOT MAKE ONE YOURSELF
+In the letsencrypt directory an acme.json file will be created, DO NOT MAKE ONE YOURSELF!
 Making acme.json in letsencrypt can cause Let's Encrypt certificate generation to fail silently giving the error:
 ```
 Resolver not found for le
