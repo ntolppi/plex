@@ -1,0 +1,2 @@
+# Ignore certs file
+./letsencrypt/acme.json
