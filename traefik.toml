@@ -1,7 +1,7 @@
 # traefik.toml
-logLevel = "INFO"
-traefikLogsFile = "/var/log/traefik/traefik.log"
-accessLogsFile = "/var/log/traefik/access.log"
+[providers.docker]
+[api]
+  insecure = true
 
 [retry]
   attempts = 3
@@ -9,12 +9,22 @@ accessLogsFile = "/var/log/traefik/access.log"
 defaultEntryPoints = ["http", "https"]
 [entryPoints]
   [entryPoints.http]
-  address = ":80"
-    [entryPoints.http.redirect]
-      entryPoint = "https"
+    address = ":80"
+    [entryPoints.http.http]
+      [entryPoints.http.http.redirections]
+        [entryPoints.http.http.redirections.entryPoint]
+          to = "https"
+          scheme = "https"
   [entryPoints.https]
-  address = ":443"
-    [entryPoints.https.tls]
-      [[entryPoints.https.tls.certificates]]
-      CertFile = "/etc/ssl/plex_key.pem"
-      KeyFile = "/etc/ssl/plex_cert.pem"
+    address = ":443"
+
+[certificatesResolvers.le.acme]
+  email = ""
+  storage = "/letsencrypt/acme.json"
+    [certificatesResolvers.le.acme.httpChallenge]
+      entryPoint = "http"
+
+[log]
+  level = "DEBUG"
+  filePath = "/var/log/traefik/traefik.log"
+  format = "json"

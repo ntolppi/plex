@@ -2,21 +2,19 @@ version: "3"
 services:
   traefik:
     image: traefik:v2.5
-    command: --providers.docker
     container_name: traefik
     networks:
       - private
       - public
     ports:
-      - 8008:80
-      - 8443:443
+      - 80:80
+      - 443:443
       - 8080:8080
     volumes:
-      - ./traefik.toml:/etc/traefik.toml
-      - /etc/ssl/plex_key.pem:/etc/ssl/plex_key.pem
-      - /etc/ssl/plex_cert.pem:/etc/ssl/plex_cert.pem
+      - /var/log/traefik/traefik.log:/var/log/traefik/traefik.log
+      - ./traefik.toml:/etc/traefik/traefik.toml
+      - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
-      - /var/log/traefik:/var/log/traefik
   plex:
     image: lscr.io/linuxserver/plex
     container_name: plex
@@ -24,18 +22,21 @@ services:
       - private
       - public
     environment:
-      - PUID=1026
-      - PGID=100
+      - PUID=1000
+      - PGID=1000
       - VERSION=docker
       - PLEX_CLAIM= #optional
     labels:
-      - traefik.http.routers.plex.rule=Host(`plex.nzti.tv`)
+      - traefik.enabe=true
+      - traefik.http.routers.plex.rule=Host(`plex.nzti.net`)
+      - traefik.http.routers.plex.tls=true
       - traefik.http.services.plex.loadbalancer.server.port=32400
+      - traefik.http.routers.plex.tls.certresolver=le
     volumes:
-      - /volume1/data/config:/config
-      - /volume1/data/tv:/tv
-      - /volume1/data/movies:/movies
-      - /volume1/data/anime:/anime
+      - /media/config:/config
+      - /media/tv:/tv
+      - /media/movies:/movies
+      - /media/anime:/anime
     restart: unless-stopped
 
 networks:
